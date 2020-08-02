@@ -11,9 +11,28 @@
 //As our previous Battleship, the winner is the player that hits the 4 opponent's ships first
 //one more Thing create a 'reset' and a 'new game' buttons as childs of the element with the id 'buttons'. the reset button has to start the game again and the new game create a new game with new players and a new random board.
 
-const board_Player1 = document.getElementById('board_player1');
 
-for (var x = 0; x < 4; x++) {
+let boardOne;
+let boardTwo;
+
+let player1 = {
+  name: "",
+  shipCount: 0,
+  gameBoard: boardOne,
+};
+
+let player2 = {
+  name: "",
+  shipCount: 0,
+  gameBoard: boardTwo,
+};
+
+
+const board_Player1 = document.getElementById('board_player1');
+const board_Player2 = document.getElementById('board_player2');
+
+const boardMaker = (player) =>{
+  for (var x = 0; x < 4; x++) {
 
     const li = document.createElement('li'); // creating childs for the list (board), in this case represent a row number 'x' of the board
 
@@ -34,5 +53,72 @@ for (var x = 0; x < 4; x++) {
       li.appendChild(cell); //adding each cell into the row number x
     }
 
-     board_Player1.appendChild(li); //adding each row into the board
+    if (player === player1){
+      const board_Player1 = document.getElementById('board_player1');
+      board_Player1.appendChild(li); //adding each row into the board
+    } else if (player === player2) {
+      const board_Player2 = document.getElementById('board_player2');
+      board_Player2.appendChild(li); //adding each row into the board
+    }
 }
+    return player.gameBoard;
+
+};
+  boardOne = boardMaker (player1);
+  boardTwo = boardMaker (player2);
+
+
+  // //Placing the Ships
+
+  // const shipPlacement (player) => {
+  //   for (let i=0; player.shipCount < 4; i++) {
+  //     let x = Math.floor(Math.random()*4);
+  //     let y = Math.floor(Math.random()*4);
+  //      if (player.gameBoard [x][y] === 1){
+  //        continue;
+  //      }
+  //      player.shipCount ++;
+  //      player.gameBoard[x][y] = 1;
+  //   }
+  //     return player.gameBoard
+  // };
+
+  // shipPlacement(player1);
+  // shipPlacement(player2);
+
+
+  // //play Game 
+
+  // let currentPlayer = player1;
+  // let opponent = player2;
+
+  // let turn = document.querySelector("#turn_player");
+  // turn.textContent+ currentPlayer.name;
+
+  // const battleship = () => {
+  //   while(opponent.shipCount > 0) {
+  //     alert(`It is your turn, ${currentPlayer.name}`);
+  //     let strikeX = prompt("Choose your 'x' coordinate to stike.");
+  //     let strikeY = prompt("Choose your 'y' coordinate to stike.");
+  //      if(opponent.gameBoard[strikeX][strikeY] == 1){
+  //        opponent.gameBoard[strikeX][strikeY] = 0;
+  //        opponent.ShipCount --;
+  //        alert("Strike");
+  //        if (opponent.shipCount === 0) {
+  //         alert(`Congrats, ${currentPlayer.name}! You won!`);
+  //         break;
+
+  //        }
+  //      } else {
+  //        alert("Miss!");
+  //      }
+  //      [currentPlayer, opponent] = [opponent, currentPlayer];
+  //   }
+  //       return `${currentPlayer.name}, you are the winner!`;
+  // }
+
+  // const battleshipResult = battleship();
+
+
+  // const htmlTarget = document.getElementById('result')
+  // htmlTarget.Target.innerHTML = battleshipResult
