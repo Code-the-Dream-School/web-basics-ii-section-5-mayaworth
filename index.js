@@ -49,9 +49,22 @@ const createBoard = (player) =>{
           let cell = e.target; // get the element clicked
           console.log( cell.textContent) //display the coordinates in the console
           cell.style.visibility = 'hidden';// this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
-            
-            if (arrayOpponents[i].gameBoard[x][y] === 1){
-              arrayOpponents[i].shipCount--;
+          let coordinates = cell.textContent.split(",");
+          let x = parseInt(coordinates[0]);
+          let y = parseInt(coordinates[1]);
+          console.log(x);
+          console.log(y);
+
+          let opponents;
+          if (currentPlayer ===player1){
+            opponent = player2;
+          } else {
+            opponent = player1;
+          }
+            if (arrayOpponents.gameBoard[x][y] === 1){
+              arrayOpponents[x][y] = 0;
+              arrayOpponents.shipCount--;
+              alert("Hit!");
               cell.style.background ="purple"
             } 
               else {
@@ -59,10 +72,10 @@ const createBoard = (player) =>{
                 cell.style.background ="yellow"
               }  
           
-      });
+      };
 
       li.appendChild(cell); //adding each cell into the row number x
-    } if (player === player1){
+       if (player === player1){
       const board_Player1 = document.getElementById('board_player1');
       board_Player1.appendChild(li); //adding each row into the board
       }   else if (player === player2) {
@@ -71,7 +84,6 @@ const createBoard = (player) =>{
     }
 }
     return player.gameBoard;
-
 };
 
 
@@ -81,24 +93,26 @@ const createBoard = (player) =>{
 
   //Placing the Ships
 
-  function ships(player){
-    player.board= new Array(4);
-    for (let i=0; player.shipCount < 4; i++) {
-          player.board[i] = new Array(4);
-          player.board[i].fill(0);
-    } 
-      while(player.shipCount < 4){
-      let x = Math.floor(Math.random()*4);
-      let y = Math.floor(Math.random()*4);
-         console.log(x,y);
-         if (player.board[y][x] === 0){
-           player.board[y][x] = 1;
-           player.shipCount ++;
-         } 
+
+
+  // function ships(player){
+  //   player.board= new Array(4);
+  //   for (let i=0; player.shipCount < 4; i++) {
+  //         player.board[i] = new Array(4);
+  //         player.board[i].fill(0);
+  //   } 
+  //     while(player.shipCount < 4){
+  //     let x = Math.floor(Math.random()*4);
+  //     let y = Math.floor(Math.random()*4);
+  //        console.log(x,y);
+  //        if (player.board[y][x] === 0){
+  //          player.board[y][x] = 1;
+  //          player.shipCount ++;
+  //        } 
          
-      }
-        // return player.gameBoard;
-    };
+  //     }
+  //       // return player.gameBoard;
+  //   };
 
 
  
