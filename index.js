@@ -11,159 +11,202 @@
 //As our previous Battleship, the winner is the player that hits the 4 opponent's ships first
 //one more Thing create a 'reset' and a 'new game' buttons as childs of the element with the id 'buttons'. the reset button has to start the game again and the new game create a new game with new players and a new random board.
 
-
 let player1 = {
   name: prompt("Player One, enter your name."),
-  shipCount: 0,
-  gameBoard: [],
-};
+  shipCount: 4,
+  gameBoard: [
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+  ]
+}
 
 let player2 = {
   name: prompt("Player Two, enter your name."),
-  shipCount: 0,
-  gameBoard: [],
-};
+  shipCount: 4,
+  gameBoard: [
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+  ]
+}
 
 
-const board_Player1 = document.getElementById('board_player1');
-const board_Player2 = document.getElementById('board_player2');
-const name_player1 = document.getElementById("name_player1");
-const name_player2 = document.getElementById("name_player2");
+//variables
+let x;
+let y;
+let coordinateOne = [];
+let coordinateTwo = [];
+let currentplayer = player1;
+let opponent = player2;
+let player;
+let livesOne;
+let livesTwo;
+let winner;
 
-const arrayPlayerBoards = [board_Player1, board_Player2];
-const arrayOpponents = [player2, player1];
 
-const createBoard = (player) =>{
+function randomNumber(){
+    let coordx = Math.floor(Math.random()*4);
+    let coordy = Math.floor(Math.random()*4);
+    let num = [coordx][coordy];
+    console.log(num);
+}
+
+function createShip(player, ships) {
+  let i = 0;
+  do {
+    const x = getrandomNumber();
+    const y = getrandomNumber();
+    if (player.gameBoard[x][y] !==1){
+      player.gameBoard[x][y] =1;
+      i++;
+    }
+  } while (i < ships)
+}
+
+function createBoards(){
+
+  const board_Player1 = document.getElementById('board_player1');
+  
+
   for (var x = 0; x < 4; x++) {
 
-    const li = document.createElement('li'); // creating childs for the list (board), in this case represent a row number 'x' of the board
+      const li = document.createElement('li'); // creating childs for the list (board), in this case represent a row number 'x' of the board
 
-    for (var y = 0; y < 4; y++) {
-      const cell = document.createElement('div');
-      cell.className = "square"; // adding css properties to make it looks like a square
-      cell.textContent = `${x},${y}`;  // saves the coordinates as a string value 'x,y'
-      cell.value = 0;//state of the cell
+      for (var y = 0; y < 4; y++) {
+        const cell = document.createElement('div');
+        cell.className = "square"; // adding css properties to make it looks like a square
+        cell.textContent = `${x},${y}`;  // saves the coordinates as a string value 'x,y'
+        cell.value = 0;//state of the cell
 
-      //this function adds the click event to each cell
-      cell.addEventListener( 'click', (e) => {
-          let cell = e.target; // get the element clicked
-          console.log( cell.textContent) //display the coordinates in the console
-          cell.style.visibility = 'hidden';// this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
-          let coordinates = cell.textContent.split(",");
-          let x = parseInt(coordinates[0]);
-          let y = parseInt(coordinates[1]);
-          console.log(x);
-          console.log(y);
-
-          let opponents;
-          if (currentPlayer ===player1){
+        //this function adds the click event to each cell
+        cell.addEventListener( 'click', (e) => {
+          if (document.getElementById('board_player2').disabled === true)
+            return false;
+        };
+          //   document.getElementById("board_player2").disabled = true;
+          //  document.getElementById("board_player1").disabled = false;
+            let cell = e.target; // get the element clicked
+            console.log( cell.textContent) //display the coordinates in the console
+            cell.style.visibility = 'hidden';// this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
+            //cell.style.background ="purple"; //with this propertie you can change the background color of the clicked cell. try comment the line bellow and uncomment this line. Do not forget to save this file and refresh the borwser to see the changes
+            let coordinateOne = cell.textContent.split(',')
+            let x = parseInt(coordinateOne[0])
+            let y = parseInt(coordinateOne[1])
+            shootShip(player1, x, y)
+            currentplayer = player1;
             opponent = player2;
-          } else {
-            opponent = player1;
-          }
-            if (arrayOpponents.gameBoard[x][y] === 1){
-              arrayOpponents[x][y] = 0;
-              arrayOpponents.shipCount--;
-              alert("Hit!");
-              cell.style.background ="purple"
-            } 
-              else {
-                message = `Miss!`
-                cell.style.background ="yellow"
-              }  
-          
-      };
+            player = currentplayer.name;
+            lives1 = player1.shipCount;
+            lives2 = player2.shipCount;
 
-      li.appendChild(cell); //adding each cell into the row number x
-       if (player === player1){
-      const board_Player1 = document.getElementById('board_player1');
+            if((player1.shipCount === 0) || (player2.shipCount === 0))
+{
+          gameWinner();
+          refreshPage()
+}            };
+
+        li.appendChild(cell); //adding each cell into the row number x
+      }
+
       board_Player1.appendChild(li); //adding each row into the board
-      }   else if (player === player2) {
-      const board_Player2 = document.getElementById('board_player2');
+  }
+
+  const board_Player2 = document.getElementById('board_player2');
+  
+
+  for (var x = 0; x < 4; x++) {
+
+      const li = document.createElement('li'); // creating childs for the list (board), in this case represent a row number 'x' of the board
+
+      for (var y = 0; y < 4; y++) {
+        const cell = document.createElement('div');
+        cell.className = "square"; // adding css properties to make it looks like a square
+        cell.textContent = `${x},${y}`;  // saves the coordinates as a string value 'x,y'
+        cell.value = 0;//state of the cell
+
+        //this function adds the click event to each cell
+        cell.addEventListener( 'click', (e) => {
+          if (document.getElementById('board_player2').disabled === true)
+            return false;
+        }
+        
+            document.getElementById("board_player2").disabled = true;
+            document.getElementById("board_player1").disabled = false;
+            let cell = e.target; // get the element clicked
+            console.log( cell.textContent) //display the coordinates in the console
+            cell.style.visibility = 'hidden';// this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
+            //cell.style.background ="purple"; //with this propertie you can change the background color of the clicked cell. try comment the line bellow and uncomment this line. Do not forget to save this file and refresh the borwser to see the changes
+            let coordinateTwo = cell.textContent.split(',')
+            let x = parseInt(coordinateTwo[0])
+            let y = parseInt(coordinateTwo[1])
+            shootShip(player2, x, y)
+            currentplayer = player2;
+            opponent = player1;
+            player = currentplayer.name;
+            lives1 = player1.shipCount;
+            lives2 = player2.shipCount;
+
+            if((player1.shipCount === 0) || (player2.shipCount === 0)){
+          gameWinner();
+          refreshPage()
+          }           
+
+          };
+
+        li.appendChild(cell); //adding each cell into the row number x
+      }
+
       board_Player2.appendChild(li); //adding each row into the board
-    }
+  
+
+
+
+
+function ships(player, x, y){
+  if (player.gameBoard[x][y] ===1) {
+    alert ("Hit!")
+    player.gameBoard[x][y] = 0
+    player.shipCount--;
+  }
+    else {
+      alert("Miss!")
+    } return player.name;
+
 }
-    return player.gameBoard;
-};
 
+function createButton (){
+  const button = document.getElementById('buttons');
+  let resetButton = document.createElement("button");
+  resetButton.innerHTML = "Reset Game";
+  let newGameButton = document.createElement("button");
+  newGameButton.innerHTML = "New Game";
+  button.appendChild(resetButton);
+  button.appendChild(newGameButton);
+  resetButton.addEventListener("click",refreshPage);
+  newGameButton.addEventListener("click", createBoards);
 
-  boardOne = createBoard(player1);
-  boardTwo = createBoard(player2);
+}
 
+function refresh(){
+  window.location.reload();
+}
 
-  //Placing the Ships
+function gameWinner(){
+  if(player1.ShipCount === 0) {
+    winner = player2.name;
+    alert(`Congrats, ${player2.name}, you won the game!`)
+  }
+  else if (player2.shipCount ===0) {
+    winner = player1.name;
+    alert(`Congrats, ${player1.name}, you won the game!`)
+  }
+  return winner;
+}
 
-
-
-  // function ships(player){
-  //   player.board= new Array(4);
-  //   for (let i=0; player.shipCount < 4; i++) {
-  //         player.board[i] = new Array(4);
-  //         player.board[i].fill(0);
-  //   } 
-  //     while(player.shipCount < 4){
-  //     let x = Math.floor(Math.random()*4);
-  //     let y = Math.floor(Math.random()*4);
-  //        console.log(x,y);
-  //        if (player.board[y][x] === 0){
-  //          player.board[y][x] = 1;
-  //          player.shipCount ++;
-  //        } 
-         
-  //     }
-  //       // return player.gameBoard;
-  //   };
-
-
- 
-
-  // ships(player1);
-  // ships(player2);
-
-
-  // //play Game 
-
-  // let currentPlayer = player1;
-  // let opponent = player2;
-
-  // let turn = document.querySelector("#turn_player");
-  // turn.textContent+ currentPlayer.name;
-
-  // const battleship = () => {
-  //   while(opponent.shipCount > 0) {
-  //     alert(`It is your turn, ${currentPlayer.name}`);
-  //     let strikeX = prompt("Choose your 'x' coordinate to stike.");
-  //     let strikeY = prompt("Choose your 'y' coordinate to stike.");
-  //      if(opponent.gameBoard[strikeX][strikeY] == 1){
-  //        opponent.gameBoard[strikeX][strikeY] = 0;
-  //        opponent.ShipCount --;
-  //        alert("Strike");
-  //        if (opponent.shipCount === 0) {
-  //         alert(`Congrats, ${currentPlayer.name}! You won!`);
-  //         break;
-
-  //        }
-  //      } else {
-  //        alert("Miss!");
-  //      }
-  //      [currentPlayer, opponent] = [opponent, currentPlayer];
-  //   }
-  //       return `${currentPlayer.name}, you are the winner!`;
-  // }
-
-  // const battleshipResult = battleship();
-
-    // function addButtons() {
-    //   let resetButton = document.createElement("Button");
-    //   let newGameButton = document.createElement("Button");
-    //   resetButton.innerHTML = "Reset"
-    //   newGameButton.innerHTML ="New Game"
-    //   button.appendChild(resetButton)
-    //   button.appendChild(newGameButton)
-    //   resetButton.addEventListener("click", resetGame)
-    //   newGameButton.addEventListener("click", newGame)
-    // }
-
-    // addButtons();
-  // const htmlTarget = document.getElementById('result')
-  // htmlTarget.Target.innerHTML = battleshipResult
+createBoards();
+createButton();
+createShip(player1,4)
+createShip(player1)
