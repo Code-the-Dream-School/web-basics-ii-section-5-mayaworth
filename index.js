@@ -48,22 +48,20 @@ let winner;
 
 
 function randomNumber(){
-    let coordx = Math.floor(Math.random()*4);
-    let coordy = Math.floor(Math.random()*4);
-    let num = [coordx][coordy];
-    console.log(num);
+    let num = Math.floor(Math.random()*4);
+    return num;  
 }
 
-function createShip(player, ships) {
+function createShip(player, shipCount) {
   let i = 0;
   do {
     const x = randomNumber();
     const y = randomNumber();
-    if (player.gameBoard[x][y] ==1){
+    if (player.gameBoard[x][y] !==1){
       player.gameBoard[x][y] = 1;
       i++;
     }
-  } while (i < ships)
+  } while (i < 4)
 }
 
 function createBoards(){
@@ -171,8 +169,8 @@ function shootShip(player, x, y){
   }
     else {
       alert("Miss!")
-    } return player.name;
-
+    } 
+  return player.name;
 }
 
 function createButton (){
@@ -206,5 +204,5 @@ function gameWinner(){
 
 createBoards();
 createButton();
-createShip(player1, 4)
-createShip(player2, 4)
+createShip(player1, 4);
+createShip(player2, 4);
