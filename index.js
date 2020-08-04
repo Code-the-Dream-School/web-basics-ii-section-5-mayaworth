@@ -47,21 +47,19 @@ let livesTwo;
 let winner;
 
 
-function randomNumber(){
-    let num = Math.floor(Math.random()*4);
-    return num;  
-}
 
-function createShip(player, shipCount) {
-  let i = 0;
-  do {
-    const x = randomNumber();
-    const y = randomNumber();
-    if (player.gameBoard[x][y] !==1){
-      player.gameBoard[x][y] = 1;
-      i++;
-    }
-  } while (i < 4)
+
+function createButton (){
+  const button = document.getElementById('buttons');
+  let resetButton = document.createElement("button"); //reset button
+  resetButton.innerHTML = "Reset Game";
+  let newGameButton = document.createElement("button"); //new game button
+  newGameButton.innerHTML = "New Game";
+  button.appendChild(resetButton);
+  button.appendChild(newGameButton);
+  resetButton.addEventListener("click", refresh);
+  newGameButton.addEventListener("click", createBoards);
+
 }
 
 function createBoards(){
@@ -90,12 +88,12 @@ function createBoards(){
             let coordinateOne = cell.textContent.split(',')
             let x = parseInt(coordinateOne[0])
             let y = parseInt(coordinateOne[1])
-            shootShip(player1, x, y)
+            shootShip(player1, x, y);
             currentplayer = player1;
             opponent = player2;
             player = currentplayer.name;
-            lives1 = player1.shipCount;
-            lives2 = player2.shipCount;
+            lives1 = currentplayer.shipCount;
+            lives2 = opponent.shipCount;
 
             if((player1.shipCount === 0) || (player2.shipCount === 0)){
             
@@ -125,12 +123,12 @@ function createBoards(){
 
         //this function adds the click event to each cell
         cell.addEventListener('click', (e) => {
-          if (document.getElementById('board_player2').disabled === true){
+          if (document.getElementById('board_player1').disabled === true){
             return false
         }
         
-            document.getElementById("board_player2").disabled = true;
-            document.getElementById("board_player1").disabled = false;
+            document.getElementById("board_player1").disabled = true;
+            document.getElementById("board_player2").disabled = false;
             let cell = e.target; // get the element clicked
             console.log(cell.textContent) //display the coordinates in the console
             // cell.style.visibility = 'hidden';// this  means that the contents of the element will be invisible, but the element stays in its original position and size / try it clicking on any of the black cells (in your browser) and see whats happens
@@ -158,33 +156,34 @@ function createBoards(){
  return     
 }
 
-
-
+function randomNumber(){
+  let num = Math.floor(Math.random()*4);
+  return num;  
+}
+function createShip(player, shipCount) {
+let i = 0;
+do {
+  const x = randomNumber();
+  const y = randomNumber();
+  if (player.gameBoard[x][y] !==1){
+    player.gameBoard[x][y] = 1;
+    i++;
+  }
+} while (i < 4)
+}
 
 function shootShip(player, x, y){
-  if (player.gameBoard[x][y] ===1) {
-    alert ("Hit!")
-    player.gameBoard[x][y] = 0
-    player.shipCount--;
-  }
-    else {
-      alert("Miss!")
-    } 
-  return player.name;
+if (player.gameBoard[x][y] ===1) {
+  alert ("Hit!")
+  player.gameBoard[x][y] = 0
+  player.shipCount--;
+}
+  else {
+    alert("Miss!")
+  } 
+return player.name;
 }
 
-function createButton (){
-  const button = document.getElementById('buttons');
-  let resetButton = document.createElement("button");
-  resetButton.innerHTML = "Reset Game";
-  let newGameButton = document.createElement("button");
-  newGameButton.innerHTML = "New Game";
-  button.appendChild(resetButton);
-  button.appendChild(newGameButton);
-  resetButton.addEventListener("click", refresh);
-  newGameButton.addEventListener("click", createBoards);
-
-}
 
 function refresh(){
   window.location.reload();
@@ -206,3 +205,5 @@ createBoards();
 createButton();
 createShip(player1, 4);
 createShip(player2, 4);
+shootShip();
+gameWinner();
